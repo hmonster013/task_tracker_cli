@@ -40,3 +40,6 @@ build/
 
 ### Mock Data ###
 data.json
+
+### Language Config ###
+language.config
