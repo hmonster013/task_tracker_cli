@@ -26,8 +26,8 @@ public class Messages {
     private static void initMessages() {
         // Error messages
         addMessage("error.no_command", "Error: No command provided!", "Lỗi: Chưa nhập lệnh!");
-        addMessage("error.available_commands", "Available commands: add, update, delete, mark-in-progress, mark-done, list, language", 
-                   "Các lệnh khả dụng: add, update, delete, mark-in-progress, mark-done, list, language");
+        addMessage("error.available_commands", "Available commands: add, update, delete, mark-in-progress, mark-done, list, language, help", 
+                   "Các lệnh khả dụng: add, update, delete, mark-in-progress, mark-done, list, language, help");
         addMessage("error.parsing_failed", "Command parsing failed. Please check your input.", "Phân tích lệnh thất bại. Vui lòng kiểm tra lại đầu vào.");
         addMessage("error.unknown_command", "Error: Unknown command '{0}'", "Lỗi: Lệnh không xác định '{0}'");
         
@@ -62,6 +62,24 @@ public class Messages {
         // Language command
         addMessage("error.lang.invalid", "Error: Invalid language! Use: language vi or language en", "Lỗi: Ngôn ngữ không hợp lệ! Dùng: language vi hoặc language en");
         addMessage("success.lang.changed", "Language changed to {0}", "Đã đổi ngôn ngữ sang {0}");
+        
+        // Help command
+        addMessage("help.title", "=== Task Tracker CLI - Help ===", "=== Task Tracker CLI - Trợ Giúp ===");
+        addMessage("help.usage", "Usage: task-cli <command> [arguments]", "Cách dùng: task-cli <lệnh> [tham số]");
+        addMessage("help.commands", "Available Commands:", "Các Lệnh Khả Dụng:");
+        addMessage("help.add", "  add <description>              - Add a new task", "  add <mô tả>                    - Thêm task mới");
+        addMessage("help.update", "  update <id> <description>      - Update a task", "  update <id> <mô tả>            - Cập nhật task");
+        addMessage("help.delete", "  delete <id>                    - Delete a task", "  delete <id>                    - Xóa task");
+        addMessage("help.mark_progress", "  mark-in-progress <id>          - Mark task as in-progress", "  mark-in-progress <id>          - Đánh dấu đang làm");
+        addMessage("help.mark_done", "  mark-done <id>                 - Mark task as done", "  mark-done <id>                 - Đánh dấu hoàn thành");
+        addMessage("help.list", "  list                           - List all tasks", "  list                           - Liệt kê tất cả");
+        addMessage("help.list_status", "  list <status>                  - List tasks by status (todo/in-progress/done)", "  list <trạng thái>              - Liệt kê theo trạng thái (todo/in-progress/done)");
+        addMessage("help.language", "  language <vi|en>               - Change language", "  language <vi|en>               - Đổi ngôn ngữ");
+        addMessage("help.help", "  help                           - Show this help message", "  help                           - Hiển thị trợ giúp");
+        addMessage("help.examples", "Examples:", "Ví Dụ:");
+        addMessage("help.example1", "  task-cli add \"Buy groceries\"", "  task-cli add \"Mua đồ tạp hóa\"");
+        addMessage("help.example2", "  task-cli mark-in-progress 1", "  task-cli mark-in-progress 1");
+        addMessage("help.example3", "  task-cli list done", "  task-cli list done");
         
         // File errors
         addMessage("error.file.not_exist", "File không tồn tại. Đang khởi tạo file mới", "File does not exist. Creating new file");

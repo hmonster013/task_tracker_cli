@@ -125,6 +125,9 @@ public class CommandParser {
                 }
                 return new LanguageCommand(lang);
 
+            case TaskCommand.HELP:
+                return new HelpCommand();
+
             default:
                 System.err.println(Messages.get("error.unknown_command", args[0]));
                 return null;
