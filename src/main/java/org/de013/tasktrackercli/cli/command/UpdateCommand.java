@@ -6,7 +6,7 @@ public class UpdateCommand implements Command {
     private int id;
     private String description;
 
-    public UpdateCommand() {};
+    public UpdateCommand() {}
 
     public UpdateCommand(int id, String description){
         this.id = id;

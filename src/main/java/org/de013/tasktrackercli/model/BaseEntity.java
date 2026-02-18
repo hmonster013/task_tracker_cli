@@ -10,7 +10,7 @@ public class BaseEntity {
 
     public BaseEntity() {
         this.createdAt = LocalDateTime.now();
-    };
+    }
 
     public BaseEntity(LocalDateTime createdAt, LocalDateTime updatedAt, String createdBy, String updatedBy) {
         this.createdAt = createdAt;

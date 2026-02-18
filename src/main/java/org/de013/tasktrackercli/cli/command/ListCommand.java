@@ -14,10 +14,10 @@ public class ListCommand implements Command {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append("Task " + i + ": " + "\n");
-            sb.append("=============================================\n");
-            sb.append(tasks.get(i).toString() + "\n");
-            sb.append("=============================================\n");
+            sb.append("Task ").append(i).append(": ").append("\n")
+                    .append("=============================================\n")
+                    .append(tasks.get(i).toString()).append("\n")
+                    .append("=============================================\n");
         }
 
         System.out.println(sb.toString());

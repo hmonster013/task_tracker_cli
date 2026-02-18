@@ -14,11 +14,10 @@ import java.util.regex.Pattern;
 public class JsonTaskRepository implements TaskRepository {
     private static final Path FILE_PATH = Paths.get("data.json");
     private static final Pattern NEXTID_PATTERN = Pattern.compile("\\s*\"nextId\"\\s*:\\s*(\\d+)\\s*", Pattern.DOTALL);
-    private static final Pattern RAW_TASKS_PATTERN = Pattern.compile("\\{\\s*\"id\"\\s*:\\s*\\d+[\\s\\S]*?\\}", Pattern.DOTALL);
+    private static final Pattern RAW_TASKS_PATTERN = Pattern.compile("\\{\\s*\"id\"\\s*:\\s*\\d+[\\s\\S]*?}", Pattern.DOTALL);
 
-    private String data;
     private int nextId = 0;
-    private List<Task> tasks;
+    private final List<Task> tasks;
 
     public JsonTaskRepository() {
         this.tasks = new ArrayList<>();
@@ -27,7 +26,7 @@ public class JsonTaskRepository implements TaskRepository {
 
     private void readData() {
         try {
-            this.data = Files.readString(FILE_PATH);
+            String data = Files.readString(FILE_PATH);
 
             // Read nextId
             Matcher nextIdMatcher = NEXTID_PATTERN.matcher(data);
@@ -46,7 +45,6 @@ public class JsonTaskRepository implements TaskRepository {
     }
 
     public boolean saveData(List<Task> tasks, boolean increaseId) {
-        // TODO: Xử lý các trường hợp command
         if (increaseId) {
             this.nextId++;
         }

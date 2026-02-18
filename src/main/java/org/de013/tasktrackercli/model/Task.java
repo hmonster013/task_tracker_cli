@@ -68,13 +68,11 @@ public class Task {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id: " + this.id + "\n" +
+        return "Id: " + this.id + "\n" +
                 "Description: " + this.description + "\n" +
                 "Status: " + this.status + "\n" +
                 "Created At: " + this.createdAt + "\n" +
-                "Updated At: " + this.updatedAt);
-        return sb.toString();
+                "Updated At: " + this.updatedAt;
     }
 }
 
