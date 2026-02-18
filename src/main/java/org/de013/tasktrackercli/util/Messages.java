@@ -81,6 +81,13 @@ public class Messages {
         addMessage("help.example2", "  task-cli mark-in-progress 1", "  task-cli mark-in-progress 1");
         addMessage("help.example3", "  task-cli list done", "  task-cli list done");
         
+        // List command messages
+        addMessage("list.empty", "No tasks found.", "Không có task nào.");
+        addMessage("list.empty_status", "No {0} tasks found.", "Không có task {0} nào.");
+        addMessage("list.header", "All Tasks ({0} total)", "Tất Cả Tasks ({0} tasks)");
+        addMessage("list.header_status", "{0} Tasks ({1} total)", "Tasks {0} ({1} tasks)");
+        addMessage("list.total", "Total: {0} task(s)", "Tổng: {0} task(s)");
+        
         // File errors
         addMessage("error.file.not_exist", "File does not exist. Creating new file", "File không tồn tại. Đang khởi tạo file mới");
         addMessage("error.file.corrupt", "Error: JSON file is corrupted or cannot be read!", "Lỗi: File JSON bị hỏng (corrupt) hoặc không đọc được!");

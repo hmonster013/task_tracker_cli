@@ -92,7 +92,7 @@ public class JsonTaskRepository implements TaskRepository {
         int potentialNextId = increaseId ? this.nextId + 1 : this.nextId;
 
         try {
-            String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
+            String json = JsonUtil.convertListTaskToJson(tasks, potentialNextId);
 
             Files.writeString(filePath, json);
 
