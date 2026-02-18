@@ -82,11 +82,11 @@ public class Messages {
         addMessage("help.example3", "  task-cli list done", "  task-cli list done");
         
         // File errors
-        addMessage("error.file.not_exist", "File không tồn tại. Đang khởi tạo file mới", "File does not exist. Creating new file");
-        addMessage("error.file.corrupt", "Lỗi: File JSON bị hỏng (corrupt) hoặc không đọc được!", "Error: JSON file is corrupted or cannot be read!");
-        addMessage("error.file.backup", "Đã sao lưu file lỗi sang: {0}", "Backed up corrupted file to: {0}");
-        addMessage("error.file.backup_failed", "Không thể backup file lỗi: {0}", "Cannot backup corrupted file: {0}");
-        addMessage("error.file.write", "Lỗi ghi file: {0}", "Error writing file: {0}");
+        addMessage("error.file.not_exist", "File does not exist. Creating new file", "File không tồn tại. Đang khởi tạo file mới");
+        addMessage("error.file.corrupt", "Error: JSON file is corrupted or cannot be read!", "Lỗi: File JSON bị hỏng (corrupt) hoặc không đọc được!");
+        addMessage("error.file.backup", "Backed up corrupted file to: {0}", "Đã sao lưu file lỗi sang: {0}");
+        addMessage("error.file.backup_failed", "Cannot backup corrupted file: {0}", "Không thể backup file lỗi: {0}");
+        addMessage("error.file.write", "Error writing file: {0}", "Lỗi ghi file: {0}");
     }
 
     private static void addMessage(String key, String en, String vi) {

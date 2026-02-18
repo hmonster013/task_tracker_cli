@@ -15,18 +15,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class JsonTaskRepository implements TaskRepository {
-    private static final Path FILE_PATH = Paths.get("data.json");
+    private static final Path DEFAULT_FILE_PATH = Paths.get("data.json");
     private static final Pattern NEXTID_PATTERN = Pattern.compile("\\s*\"nextId\"\\s*:\\s*(\\d+)\\s*", Pattern.DOTALL);
     private static final Pattern RAW_TASKS_PATTERN = Pattern.compile("\\{\\s*\"id\"\\s*:\\s*\\d+[\\s\\S]*?}", Pattern.DOTALL);
 
+    private final Path filePath;
     private int nextId = 0;
     private final List<Task> tasks;
+    
     public JsonTaskRepository() {
+        this(DEFAULT_FILE_PATH);
+    }
+    
+    public JsonTaskRepository(Path filePath) {
+        this.filePath = filePath;
         this.tasks = loadFile();
     }
 
     private List<Task> loadFile() {
-        File file = new File(FILE_PATH.toString());
+        File file = new File(filePath.toString());
 
         // Kiểm tra file có tồn tại hay không
         if (!file.exists()) {
@@ -54,8 +61,8 @@ public class JsonTaskRepository implements TaskRepository {
 
     private void handleCorruptFile(File file) {
         try {
-            File backup = new File(FILE_PATH.toString() + ".bak");
-            Files.move(file.toPath(), backup.toPath());
+            File backup = new File(filePath.toString() + ".bak");
+            Files.move(file.toPath(), backup.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             System.out.println(Messages.get("error.file.backup", backup.getName()));
         } catch (IOException e) {
             System.err.println(Messages.get("error.file.backup_failed", e.getMessage()));
@@ -87,7 +94,7 @@ public class JsonTaskRepository implements TaskRepository {
         try {
             String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
 
-            Files.writeString(FILE_PATH, json);
+            Files.writeString(filePath, json);
 
             if (increaseId) {
                 this.nextId = potentialNextId;
@@ -104,7 +111,7 @@ public class JsonTaskRepository implements TaskRepository {
         try {
             String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
 
-            Files.writeString(FILE_PATH, json);
+            Files.writeString(filePath, json);
 
             return true;
         } catch (IOException e) {
