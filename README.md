@@ -1,99 +1,181 @@
-Task Tracker
-Build a CLI app to track your tasks and manage your to-do list.
-Task tracker is a project used to track and manage your tasks. In this task, you will build a simple command line interface (CLI) to track what you need to do, what you have done, and what you are currently working on. This project will help you practice your programming skills, including working with the filesystem, handling user inputs, and building a simple CLI application.
+# Task Tracker CLI
 
-Requirements
-The application should run from the command line, accept user actions and inputs as arguments, and store the tasks in a JSON file. The user should be able to:
+A simple command-line interface (CLI) application to track and manage your tasks. Built with Java as part of the [roadmap.sh Task Tracker project](https://roadmap.sh/projects/task-tracker).
 
-Add, Update, and Delete tasks
+## Features
 
-Mark a task as in progress or done
+- ✅ Add, update, and delete tasks
+- 📝 Mark tasks as in-progress or done
+- 📋 List all tasks or filter by status (todo, in-progress, done)
+- 🌍 Multi-language support (English/Vietnamese)
+- 💾 Data persistence with JSON file storage
 
-List all tasks
+## Requirements
 
-List all tasks that are done
+- **Java**: JDK 11 or higher
+- **Maven**: 3.6 or higher
 
-List all tasks that are not done
+## Installation & Setup
 
-List all tasks that are in progress
+### 1. Clone the repository
+```bash
+git clone <repository-url>
+cd task_tracker_cli
+```
 
-Here are some constraints to guide the implementation:
+### 2. Build the project
+```bash
+mvn clean package
+```
 
-You can use any programming language to build this project.
+This will create an executable JAR file in the `target/` directory.
 
-Use positional arguments in command line to accept user inputs.
+### 3. Run the application
+```bash
+java -jar target/task-tracker-cli-1.0-SNAPSHOT.jar <command> [arguments]
+```
 
-Use a JSON file to store the tasks in the current directory.
+Or create an alias for convenience:
+```bash
+alias task-cli='java -jar /path/to/target/task-tracker-cli-1.0-SNAPSHOT.jar'
+```
 
-The JSON file should be created if it does not exist.
+## Usage
 
-Use the native file system module of your programming language to interact with the JSON file.
+### Commands
 
-Do not use any external libraries or frameworks to build this project.
-
-Ensure to handle errors and edge cases gracefully.
-
-Example
-The list of commands and their usage is given below:
-
-bash
-
-# Adding a new task
+#### Add a new task
+```bash
 task-cli add "Buy groceries"
 # Output: Task added successfully (ID: 1)
-# Updating and deleting tasks
+```
+
+#### Update a task
+```bash
 task-cli update 1 "Buy groceries and cook dinner"
+# Output: Task updated successfully (ID: 1)
+```
+
+#### Delete a task
+```bash
 task-cli delete 1
-# Marking a task as in progress or done
+# Output: Task deleted successfully (ID: 1)
+```
+
+#### Mark task as in-progress
+```bash
 task-cli mark-in-progress 1
+# Output: Task marked as in-progress (ID: 1)
+```
+
+#### Mark task as done
+```bash
 task-cli mark-done 1
-# Listing all tasks
+# Output: Task marked as done (ID: 1)
+```
+
+#### List all tasks
+```bash
 task-cli list
-# Listing tasks by status
+```
+
+#### List tasks by status
+```bash
+# List completed tasks
 task-cli list done
+
+# List pending tasks
 task-cli list todo
+
+# List tasks in progress
 task-cli list in-progress
-Task Properties
-Each task should have the following properties:
+```
 
-id: A unique identifier for the task
+#### Change language
+```bash
+# Switch to Vietnamese
+task-cli language vi
 
-description: A short description of the task
+# Switch to English
+task-cli language en
+```
 
-status: The status of the task (todo, in-progress, done)
+#### Show help
+```bash
+task-cli help
+# Displays all available commands and usage examples
+```
 
-createdAt: The date and time when the task was created
+## Data Storage
 
-updatedAt: The date and time when the task was last updated
+Tasks are stored in a `data.json` file in the current directory. The file is automatically created on first use.
 
-Make sure to add these properties to the JSON file when adding a new task and update them when updating a task.
+### JSON Structure
+```json
+{
+  "nextId": 2,
+  "tasks": [
+    {
+      "id": 0,
+      "description": "Buy groceries",
+      "status": "todo",
+      "createdAt": "2026-02-14T10:46:39.400906100",
+      "updatedAt": "2026-02-14T10:46:39.400906100"
+    },
+    {
+      "id": 1,
+      "description": "Complete project documentation",
+      "status": "in-progress",
+      "createdAt": "2026-02-14T10:46:44.043078900",
+      "updatedAt": "2026-02-14T10:50:15.123456789"
+    }
+  ]
+}
+```
 
-Getting Started
-Here are a few steps to help you get started with the Task Tracker CLI project:
+### Task Properties
+- `id`: Unique identifier for the task
+- `description`: Short description of the task
+- `status`: Current status (`todo`, `in-progress`, `done`)
+- `createdAt`: Timestamp when the task was created
+- `updatedAt`: Timestamp when the task was last updated
 
-Set Up Your Development Environment
-Choose a programming language you are comfortable with (e.g., Python, JavaScript, etc.).
+## Troubleshooting
 
-Ensure you have a code editor or IDE installed (e.g., VSCode, PyCharm).
+**Problem**: "Error: File JSON bị hỏng (corrupt)..."  
+**Solution**: The app automatically creates a backup (`data.json.bak`). Delete `data.json` to start fresh or restore from backup.
 
-Project Initialization
-Create a new project directory for your Task Tracker CLI.
+**Problem**: "Error: Invalid ID format"  
+**Solution**: Ensure you're providing a valid numeric ID (non-negative integer).
 
-Initialize a version control system (e.g., Git) to manage your project.
+**Problem**: Language preference not persisting  
+**Solution**: The language setting is saved in `language.config`. Ensure the file has write permissions.
 
-Implementing Features
-Start by creating a basic CLI structure to handle user inputs.
+## Project Structure
+```
+src/
+├── main/java/org/de013/tasktrackercli/
+│   ├── Main.java                    # Application entry point
+│   ├── cli/
+│   │   ├── CommandParser.java       # Parse and validate commands
+│   │   └── command/                 # Command implementations
+│   ├── model/
+│   │   └── Task.java                # Task entity
+│   ├── repository/
+│   │   └── JsonTaskRepository.java  # Data persistence layer
+│   ├── service/
+│   │   └── TaskServiceImpl.java     # Business logic
+│   └── util/
+│       ├── Messages.java            # i18n support
+│       ├── JsonUtil.java            # JSON parsing utilities
+│       ├── TaskCommand.java         # Command constants
+│       └── TaskStatus.java          # Status constants
+```
 
-Implement each feature one by one, ensuring to test thoroughly before moving to the next e.g. implement adding task functionality first, listing next, then updating, marking as in progress, etc.
+## License
 
-Testing and Debugging
-Test each feature individually to ensure they work as expected. Look at the JSON file to verify that the tasks are being stored correctly.
+This project is part of the roadmap.sh backend projects curriculum.
 
-Debug any issues that arise during development.
+---
 
-Finalizing the Project
-Ensure all features are implemented and tested.
-
-Clean up your code and add comments where necessary.
-
-Write a good readme file on how to use your Task Tracker CLI.
+**Project Link**: https://roadmap.sh/projects/task-tracker
