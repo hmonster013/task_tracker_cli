@@ -1,0 +1,134 @@
+package org.de013.tasktrackercli.util;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Messages {
+    private static final Path CONFIG_FILE = Paths.get("language.config");
+    private static Language currentLanguage = Language.EN;
+
+    public enum Language {
+        VI, EN
+    }
+
+    private static final Map<String, Map<Language, String>> messages = new HashMap<>();
+
+    static {
+        loadLanguagePreference();
+        initMessages();
+    }
+
+    private static void initMessages() {
+        // Error messages
+        addMessage("error.no_command", "Error: No command provided!", "Lỗi: Chưa nhập lệnh!");
+        addMessage("error.available_commands", "Available commands: add, update, delete, mark-in-progress, mark-done, list, language", 
+                   "Các lệnh khả dụng: add, update, delete, mark-in-progress, mark-done, list, language");
+        addMessage("error.parsing_failed", "Command parsing failed. Please check your input.", "Phân tích lệnh thất bại. Vui lòng kiểm tra lại đầu vào.");
+        addMessage("error.unknown_command", "Error: Unknown command '{0}'", "Lỗi: Lệnh không xác định '{0}'");
+        
+        // Add command
+        addMessage("error.add.missing_desc", "Error: Missing description. Usage: add <description>", "Lỗi: Thiếu mô tả. Cách dùng: add <mô tả>");
+        addMessage("error.add.empty_desc", "Error: Description cannot be empty!", "Lỗi: Mô tả không được để trống!");
+        addMessage("success.add", "Task added successfully (ID: {0})", "Thêm task thành công (ID: {0})");
+        
+        // Update command
+        addMessage("error.update.missing_args", "Error: Missing arguments. Usage: update <id> <description>", "Lỗi: Thiếu tham số. Cách dùng: update <id> <mô tả>");
+        addMessage("error.update.empty_desc", "Error: Description cannot be empty!", "Lỗi: Mô tả không được để trống!");
+        addMessage("success.update", "Task updated successfully (ID: {0})", "Cập nhật task thành công (ID: {0})");
+        
+        // Delete command
+        addMessage("error.delete.missing_id", "Error: Missing ID. Usage: delete <id>", "Lỗi: Thiếu ID. Cách dùng: delete <id>");
+        addMessage("success.delete", "Task deleted successfully (ID: {0})", "Xóa task thành công (ID: {0})");
+        
+        // Mark commands
+        addMessage("error.mark.missing_id", "Error: Missing ID. Usage: {0} <id>", "Lỗi: Thiếu ID. Cách dùng: {0} <id>");
+        addMessage("success.mark_progress", "Task marked as in-progress (ID: {0})", "Đánh dấu task đang thực hiện (ID: {0})");
+        addMessage("success.mark_done", "Task marked as done (ID: {0})", "Đánh dấu task hoàn thành (ID: {0})");
+        
+        // List command
+        addMessage("error.list.invalid_status", "Error: Invalid status! Must be one of: todo, in-progress, done", 
+                   "Lỗi: Trạng thái không hợp lệ! Phải là: todo, in-progress, done");
+        
+        // Common errors
+        addMessage("error.invalid_id_format", "Error: Invalid ID format. ID must be a number!", "Lỗi: Định dạng ID không hợp lệ. ID phải là số!");
+        addMessage("error.negative_id", "Error: ID must be a non-negative number!", "Lỗi: ID phải là số không âm!");
+        addMessage("error.task_not_found", "Error: Task with ID {0} not found!", "Lỗi: Không tìm thấy task có ID {0}!");
+        
+        // Language command
+        addMessage("error.lang.invalid", "Error: Invalid language! Use: language vi or language en", "Lỗi: Ngôn ngữ không hợp lệ! Dùng: language vi hoặc language en");
+        addMessage("success.lang.changed", "Language changed to {0}", "Đã đổi ngôn ngữ sang {0}");
+        
+        // File errors
+        addMessage("error.file.not_exist", "File không tồn tại. Đang khởi tạo file mới", "File does not exist. Creating new file");
+        addMessage("error.file.corrupt", "Lỗi: File JSON bị hỏng (corrupt) hoặc không đọc được!", "Error: JSON file is corrupted or cannot be read!");
+        addMessage("error.file.backup", "Đã sao lưu file lỗi sang: {0}", "Backed up corrupted file to: {0}");
+        addMessage("error.file.backup_failed", "Không thể backup file lỗi: {0}", "Cannot backup corrupted file: {0}");
+        addMessage("error.file.write", "Lỗi ghi file: {0}", "Error writing file: {0}");
+    }
+
+    private static void addMessage(String key, String en, String vi) {
+        Map<Language, String> translations = new HashMap<>();
+        translations.put(Language.EN, en);
+        translations.put(Language.VI, vi);
+        messages.put(key, translations);
+    }
+
+    public static String get(String key, Object... params) {
+        Map<Language, String> translations = messages.get(key);
+        if (translations == null) {
+            return key;
+        }
+        
+        String message = translations.get(currentLanguage);
+        if (message == null) {
+            return key;
+        }
+        
+        // Replace placeholders {0}, {1}, etc.
+        for (int i = 0; i < params.length; i++) {
+            message = message.replace("{" + i + "}", String.valueOf(params[i]));
+        }
+        
+        return message;
+    }
+
+    public static void setLanguage(Language language) {
+        currentLanguage = language;
+        saveLanguagePreference();
+    }
+
+    public static Language getCurrentLanguage() {
+        return currentLanguage;
+    }
+
+    private static void loadLanguagePreference() {
+        File file = new File(CONFIG_FILE.toString());
+        if (!file.exists()) {
+            return;
+        }
+        
+        try {
+            String lang = Files.readString(file.toPath()).trim();
+            if ("VI".equalsIgnoreCase(lang)) {
+                currentLanguage = Language.VI;
+            } else if ("EN".equalsIgnoreCase(lang)) {
+                currentLanguage = Language.EN;
+            }
+        } catch (IOException e) {
+            // Use default language
+        }
+    }
+
+    private static void saveLanguagePreference() {
+        try {
+            Files.writeString(CONFIG_FILE, currentLanguage.name());
+        } catch (IOException e) {
+            System.err.println("Cannot save language preference: " + e.getMessage());
+        }
+    }
+}

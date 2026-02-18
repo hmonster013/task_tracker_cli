@@ -8,4 +8,5 @@ public final class TaskCommand {
     public static final String LIST = "list";
     public static final String MARK_IN_PROGRESS = "mark-in-progress";
     public static final String MARK_DONE = "mark-done";
+    public static final String LANGUAGE = "language";
 }

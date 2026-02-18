@@ -8,8 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class JsonUtil {
-//    private static final Pattern TASK_PATTERN = Pattern.compile("\\{\\s*\"id\"\\s*:\\s*(\\d+)\\s*,\\s*\"description\"\\s*:\\s*\"(.*?)\"\\s*,\\s*\"status\"\\s*:\\s*\"(\\w+)\"\\s*,\\s*\"createdAt\"\\s*:\\s*\"(.*?)\"\\s*,\\s*\"updatedAt\"\\s*:\\s*\"(.*?)\"\\s*\\}", Pattern.DOTALL);
     private static final Pattern TASK_PATTERN = Pattern.compile("\\{\\s*\"id\"\\s*:\\s*(\\d+)\\s*,\\s*\"description\"\\s*:\\s*\"(.*?)\"\\s*,\\s*\"status\"\\s*:\\s*\"(.*?)\"\\s*,\\s*\"createdAt\"\\s*:\\s*\"(.*?)\"\\s*,\\s*\"updatedAt\"\\s*:\\s*\"(.*?)\"\\s*}", Pattern.DOTALL);
+
+    // TODO: Validate JSON format khi parse
     public static Task convertJsontoTask(String data){
         Task task = null;
 

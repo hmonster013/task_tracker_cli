@@ -2,7 +2,10 @@ package org.de013.tasktrackercli.repository;
 
 import org.de013.tasktrackercli.model.Task;
 import org.de013.tasktrackercli.util.JsonUtil;
+import org.de013.tasktrackercli.util.Messages;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,56 +21,94 @@ public class JsonTaskRepository implements TaskRepository {
 
     private int nextId = 0;
     private final List<Task> tasks;
-
     public JsonTaskRepository() {
-        this.tasks = new ArrayList<>();
-        this.readData();
+        this.tasks = loadFile();
     }
 
-    private void readData() {
-        try {
-            String data = Files.readString(FILE_PATH);
+    private List<Task> loadFile() {
+        File file = new File(FILE_PATH.toString());
 
-            // Read nextId
-            Matcher nextIdMatcher = NEXTID_PATTERN.matcher(data);
-            if (nextIdMatcher.find()) {
-                this.nextId = Integer.parseInt(nextIdMatcher.group(1));
-            }
-            // Read tasks
-            Matcher rawTasksMatcher = RAW_TASKS_PATTERN.matcher(data);
-            while (rawTasksMatcher.find()) {
-                String task = rawTasksMatcher.group();
-                this.tasks.add(JsonUtil.convertJsontoTask(task));
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        // Kiểm tra file có tồn tại hay không
+        if (!file.exists()) {
+            System.out.println(Messages.get("error.file.not_exist"));
+            return new ArrayList<>();
         }
+
+        try {
+            // Kiểm tra dung lượng file (nếu file 0 byte thì Jackson sẽ báo lỗi)
+            if (Files.size(file.toPath()) == 0) {
+                return new ArrayList<>();
+            }
+
+            return readData(file);
+        } catch (Exception e) {
+            // Xử lý trường hợp corrupt (Dữ liệu sai định dạng)
+            System.out.println(Messages.get("error.file.corrupt"));
+
+            // Tùy chọn: Backup file bị hỏng để người dùng tự sửa và tạo file mới sạch sẽ
+            handleCorruptFile(file);
+
+            return new ArrayList<>();
+        }
+    }
+
+    private void handleCorruptFile(File file) {
+        try {
+            File backup = new File(FILE_PATH.toString() + ".bak");
+            Files.move(file.toPath(), backup.toPath());
+            System.out.println(Messages.get("error.file.backup", backup.getName()));
+        } catch (IOException e) {
+            System.err.println(Messages.get("error.file.backup_failed", e.getMessage()));
+        }
+    }
+
+    private List<Task> readData(File file) throws IOException{
+        String data = Files.readString(file.toPath());
+
+        // Read nextId
+        Matcher nextIdMatcher = NEXTID_PATTERN.matcher(data);
+        if (nextIdMatcher.find()) {
+            this.nextId = Integer.parseInt(nextIdMatcher.group(1));
+        }
+        // Read tasks
+        List<Task> taskData = new ArrayList<>();
+        Matcher rawTasksMatcher = RAW_TASKS_PATTERN.matcher(data);
+        while (rawTasksMatcher.find()) {
+            String task = rawTasksMatcher.group();
+            taskData.add(JsonUtil.convertJsontoTask(task));
+        }
+
+        return taskData;
     }
 
     public boolean saveData(List<Task> tasks, boolean increaseId) {
-        if (increaseId) {
-            this.nextId++;
-        }
-        String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
+        int potentialNextId = increaseId ? this.nextId + 1 : this.nextId;
 
         try {
+            String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
+
             Files.writeString(FILE_PATH, json);
+
+            if (increaseId) {
+                this.nextId = potentialNextId;
+            }
+
             return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(Messages.get("error.file.write", e.getMessage()));
             return false;
         }
     }
 
     public boolean saveData(List<Task> tasks) {
-        // TODO: Xử lý các trường hợp command
-        String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
-
         try {
+            String json = JsonUtil.convertListTaskToJson(tasks, this.nextId);
+
             Files.writeString(FILE_PATH, json);
+
             return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(Messages.get("error.file.write", e.getMessage()));
             return false;
         }
     }
