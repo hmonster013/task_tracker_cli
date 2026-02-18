@@ -10,7 +10,7 @@ import java.util.List;
 public class ListCommand implements Command {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
-    public ListCommand() {};
+    public ListCommand() {}
 
     @Override
     public void excute(TaskService taskService) {
