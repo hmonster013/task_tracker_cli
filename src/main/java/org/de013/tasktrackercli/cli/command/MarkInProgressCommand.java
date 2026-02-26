@@ -12,7 +12,7 @@ public class MarkInProgressCommand implements Command {
     }
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         taskService.markInProgress(id);
     }
 }

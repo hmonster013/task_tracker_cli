@@ -6,7 +6,7 @@ import org.de013.tasktrackercli.util.Messages;
 public class HelpCommand implements Command {
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         System.out.println(Messages.get("help.title"));
         System.out.println();
         System.out.println(Messages.get("help.usage"));

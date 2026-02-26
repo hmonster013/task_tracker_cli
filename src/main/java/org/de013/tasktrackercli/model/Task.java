@@ -5,11 +5,11 @@ import org.de013.tasktrackercli.util.TaskStatus;
 import java.time.LocalDateTime;
 
 public class Task {
-    int id;
-    String description;
-    String status = TaskStatus.TODO;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private int id;
+    private String description;
+    private TaskStatus status = TaskStatus.TODO;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Task() {}
 
@@ -20,7 +20,7 @@ public class Task {
         this.updatedAt = this.createdAt;
     }
 
-    public Task(int id, String description, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Task(int id, String description, TaskStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.description = description;
         this.status = status;
@@ -44,9 +44,9 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() { return status; }
+    public TaskStatus getStatus() { return status; }
 
-    public void setStatus(String status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 

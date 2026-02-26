@@ -22,7 +22,7 @@ public class JsonUtil {
             String created = m.group(4);
             String updated = m.group(5);
 
-            task = new Task(id, desc, status, LocalDateTime.parse(created), LocalDateTime.parse(updated));
+            task = new Task(id, desc, TaskStatus.fromString(status), LocalDateTime.parse(created), LocalDateTime.parse(updated));
         }
 
         return task;
@@ -39,7 +39,7 @@ public class JsonUtil {
             sb.append("{");
             sb.append("\"id\":").append(tasks.get(i).getId()).append(",");
             sb.append("\"description\":").append("\"").append(tasks.get(i).getDescription()).append("\",");
-            sb.append("\"status\":").append("\"").append(tasks.get(i).getStatus()).append("\",");
+            sb.append("\"status\":").append("\"").append(tasks.get(i).getStatus().value).append("\",");
             sb.append("\"createdAt\":").append("\"").append(tasks.get(i).getCreatedAt().toString()).append("\",");
             sb.append("\"updatedAt\":").append("\"").append(tasks.get(i).getUpdatedAt().toString()).append("\"");
             sb.append("}");

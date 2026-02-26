@@ -13,7 +13,7 @@ public class LanguageCommand implements Command {
     }
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         if ("vi".equalsIgnoreCase(language)) {
             Messages.setLanguage(Messages.Language.VI);
             System.out.println(Messages.get("success.lang.changed", "Tiếng Việt"));

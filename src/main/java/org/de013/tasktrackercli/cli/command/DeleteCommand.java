@@ -12,7 +12,7 @@ public class DeleteCommand implements Command {
     }
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         taskService.delete(id);
     }
 }

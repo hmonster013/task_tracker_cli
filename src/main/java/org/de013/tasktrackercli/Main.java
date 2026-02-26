@@ -24,7 +24,7 @@ public class Main {
             return;
         }
 
-        command.excute(taskService);
+        command.execute(taskService);
     }
 }
 

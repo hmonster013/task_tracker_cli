@@ -13,7 +13,7 @@ public class ListCommand implements Command {
     public ListCommand() {}
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         List<Task> tasks = taskService.getTasks();
         
         if (tasks.isEmpty()) {
@@ -33,32 +33,11 @@ public class ListCommand implements Command {
     }
     
     private void printTask(Task task) {
-        String statusIcon = getStatusIcon(task.getStatus());
-        String statusColor = getStatusText(task.getStatus());
-        
         System.out.println();
-        System.out.printf("  %s [ID: %d] %s%n", statusIcon, task.getId(), statusColor);
+        System.out.printf("  %s [ID: %d] %s%n", task.getStatus().icon, task.getId(), task.getStatus().displayName);
         System.out.printf("     Description: %s%n", task.getDescription());
         System.out.printf("     Created:     %s%n", task.getCreatedAt().format(FORMATTER));
         System.out.printf("     Updated:     %s%n", task.getUpdatedAt().format(FORMATTER));
         System.out.println("  ─────────────────────────────────────────────────────────────────────");
-    }
-    
-    private String getStatusIcon(String status) {
-        return switch (status) {
-            case "todo" -> "[ ]";
-            case "in-progress" -> "[▶]";
-            case "done" -> "[✓]";
-            default -> "[?]";
-        };
-    }
-    
-    private String getStatusText(String status) {
-        return switch (status) {
-            case "todo" -> "TODO";
-            case "in-progress" -> "IN PROGRESS";
-            case "done" -> "DONE";
-            default -> status.toUpperCase();
-        };
     }
 }

@@ -12,7 +12,7 @@ public class MarkDoneCommand implements Command {
     }
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         taskService.markDone(id);
     }
 }

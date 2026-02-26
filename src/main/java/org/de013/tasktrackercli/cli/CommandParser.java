@@ -101,14 +101,13 @@ public class CommandParser {
 
             case TaskCommand.LIST:
                 if (args.length == 2) {
-                    String status = args[1];
-                    if (!status.equals(TaskStatus.TODO) && 
-                        !status.equals(TaskStatus.IN_PROGRESS) && 
-                        !status.equals(TaskStatus.DONE)) {
+                    try {
+                        TaskStatus taskStatus = TaskStatus.fromString(args[1]);
+                        return new ListByStatusCommand(taskStatus);
+                    } catch (IllegalArgumentException e) {
                         System.err.println(Messages.get("error.list.invalid_status"));
                         return null;
                     }
-                    return new ListByStatusCommand(status);
                 } else {
                     return new ListCommand();
                 }

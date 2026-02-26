@@ -12,7 +12,7 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public void excute(TaskService taskService) {
+    public void execute(TaskService taskService) {
         taskService.add(description);
     }
 }

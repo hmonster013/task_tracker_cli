@@ -81,6 +81,7 @@ public class TaskServiceImpl implements TaskService {
         for (Task task : tasks) {
             if (task.getId() == id) {
                 task.setStatus(TaskStatus.IN_PROGRESS);
+                task.setUpdatedAt(LocalDateTime.now());
                 found = true;
                 break;
             }
@@ -102,6 +103,7 @@ public class TaskServiceImpl implements TaskService {
         for (Task task : tasks) {
             if (task.getId() == id) {
                 task.setStatus(TaskStatus.DONE);
+                task.setUpdatedAt(LocalDateTime.now());
                 found = true;
                 break;
             }
@@ -121,10 +123,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasksByStatus(String status) {
+    public List<Task> getTasksByStatus(TaskStatus status) {
         return taskRepository.getTasks()
                 .stream()
-                .filter(task -> status.equals(task.getStatus()))
+                .filter(task -> task.getStatus() == status)
                 .collect(Collectors.toList());
     }
 }
