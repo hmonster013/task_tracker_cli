@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class JsonTaskRepository implements TaskRepository {
     private static final Path DEFAULT_FILE_PATH = Paths.get("data.json");
     private static final Pattern NEXTID_PATTERN = Pattern.compile("\\s*\"nextId\"\\s*:\\s*(\\d+)\\s*", Pattern.DOTALL);
-    private static final Pattern RAW_TASKS_PATTERN = Pattern.compile("\\{\\s*\"id\"\\s*:\\s*\\d+[\\s\\S]*?}", Pattern.DOTALL);
 
     private final Path filePath;
     private int nextId = 0;
@@ -79,13 +78,38 @@ public class JsonTaskRepository implements TaskRepository {
         }
         // Read tasks
         List<Task> taskData = new ArrayList<>();
-        Matcher rawTasksMatcher = RAW_TASKS_PATTERN.matcher(data);
-        while (rawTasksMatcher.find()) {
-            String task = rawTasksMatcher.group();
-            taskData.add(JsonUtil.convertJsontoTask(task));
+        List<String> rawTask = splitObjects(data);
+        for (String raw : rawTask) {
+            taskData.add(JsonUtil.convertJsontoTask(raw));
         }
 
         return taskData;
+    }
+
+    private static List<String> splitObjects(String json) {
+        List<String> objects = new ArrayList<>();
+        json = json.trim();
+        if (json.startsWith("{")) json = json.substring(1);
+        if (json.endsWith("}")) json = json.substring(0, json.length() - 1);
+
+        int depth = 0;
+        int start = -1;
+        for (int i = 0; i < json.length(); i++) {
+            char c = json.charAt(i);
+            if (c == '{') {
+                if (depth == 0)  start = i;
+                depth++;
+            }
+            if (c == '}') {
+                depth--;
+                if (depth == 0 && start != -1) {
+                    objects.add(json.substring(start, i + 1));
+                    start = -1;
+                }
+            }
+        }
+
+        return objects;
     }
 
     public boolean saveData(List<Task> tasks, boolean increaseId) {

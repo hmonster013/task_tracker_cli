@@ -41,7 +41,7 @@ public class JsonUtil {
             sb.append("\"description\":").append("\"").append(tasks.get(i).getDescription()).append("\",");
             sb.append("\"status\":").append("\"").append(tasks.get(i).getStatus()).append("\",");
             sb.append("\"createdAt\":").append("\"").append(tasks.get(i).getCreatedAt().toString()).append("\",");
-            sb.append("\"updatedAt\":").append("\"").append(tasks.get(i).getCreatedAt().toString()).append("\"");
+            sb.append("\"updatedAt\":").append("\"").append(tasks.get(i).getUpdatedAt().toString()).append("\"");
             sb.append("}");
             if (i < tasks.size() - 1) {
                 sb.append(",");
